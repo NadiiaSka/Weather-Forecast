@@ -21,6 +21,7 @@
   line-height: 1.5;
   margin: 0;
   letter-spacing: 1px;
+  text-align: left;
 }
 
 .weather-description {
@@ -28,6 +29,7 @@
   font-size: 14px;
   line-height: 1;
   margin: 0;
+  text-align: left;
 }
 
 .weather-icon {
