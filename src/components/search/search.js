@@ -25,7 +25,6 @@ const Search = ({ onSearchChange }) => {
           };
         }),
       };
-      console.log(formatedResult);
       return formatedResult;
     } catch (error) {
       console.error(error);
