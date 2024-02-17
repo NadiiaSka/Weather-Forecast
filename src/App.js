@@ -2,16 +2,28 @@ import "./App.css";
 import Search from "./components/search/search";
 import CurrentWeather from "./components/current-weather/current-weather";
 import { WEATHER_API_KEY, WEATHER_API_URL } from "./api";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Forecast from "./components/forecast/forecast";
 
 function App() {
+  const defaultSearchData = { value: "50.4504 30.5245", label: "Kyiv" };
   const [currentWeather, setCurrentWeather] = useState(null);
   const [forecastWeather, setForecastWeather] = useState(null);
 
+  useEffect(() => {
+    // Fetch weather data for default lat lon on component mount
+    fetchWeatherForLocation(defaultSearchData);
+  }, []);
+
   const handleOnSearchChange = (searchData) => {
+    if (searchData) {
+      fetchWeatherForLocation(searchData);
+    }
+    return;
+  };
+
+  const fetchWeatherForLocation = (searchData) => {
     const [lat, lon] = searchData.value.split(" ");
-    console.log(searchData);
     const currentWeatherFetch = fetch(
       `${WEATHER_API_URL}/weather?lat=${lat}&lon=${lon}&exclude={part}&units=metric&appid=${WEATHER_API_KEY}`
     );
@@ -27,9 +39,6 @@ function App() {
       })
       .catch((err) => console.log(err));
   };
-
-  console.log(currentWeather);
-  console.log(forecastWeather);
 
   return (
     <div className="container">
