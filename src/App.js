@@ -12,7 +12,7 @@ function App() {
 
   useEffect(() => {
     fetchWeather(defaultSearchData);
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const fetchWeather = async (searchData) => {
     try {
@@ -35,6 +35,8 @@ function App() {
       console.error("Error fetching weather data:", error);
     }
   };
+
+  console.log(forecastWeather);
 
   const handleOnSearchChange = (searchData) => {
     if (searchData) {
