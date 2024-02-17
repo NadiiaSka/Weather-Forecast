@@ -24,7 +24,7 @@ const Forecast = ({ data }) => {
   );
   return (
     <>
-      <label className="title">Daily forecast</label>
+      <label className="title">Daily forecast:</label>
       <Accordion allowZeroExpanded>
         {data.list.splice(0, 7).map((item, index) => {
           return (
@@ -49,7 +49,7 @@ const Forecast = ({ data }) => {
                 </AccordionItemButton>
               </AccordionItemHeading>
               <AccordionItemPanel>
-                <p>{Math.round(item.main.temp)}°C</p>
+                <p></p>
               </AccordionItemPanel>
             </AccordionItem>
           );
