@@ -1,9 +1,9 @@
 import "./App.css";
+import { useEffect, useState } from "react";
 import Search from "./components/search/search";
 import CurrentWeather from "./components/current-weather/current-weather";
-import { WEATHER_API_KEY, WEATHER_API_URL } from "./api";
-import { useEffect, useState } from "react";
 import Forecast from "./components/forecast/forecast";
+import { WEATHER_API_KEY, WEATHER_API_URL } from "./api";
 
 function App() {
   const defaultSearchData = { value: "50.4504 30.5245", label: "Kyiv" };
@@ -11,33 +11,35 @@ function App() {
   const [forecastWeather, setForecastWeather] = useState(null);
 
   useEffect(() => {
-    // Fetch weather data for default lat lon on component mount
-    fetchWeatherForLocation(defaultSearchData);
+    fetchWeather(defaultSearchData);
   }, []);
+
+  const fetchWeather = async (searchData) => {
+    try {
+      const [lat, lon] = searchData.value.split(" ");
+      const [currentResponse, forecastResponse] = await Promise.all([
+        fetch(
+          `${WEATHER_API_URL}/weather?lat=${lat}&lon=${lon}&exclude={part}&units=metric&appid=${WEATHER_API_KEY}`
+        ),
+        fetch(
+          `${WEATHER_API_URL}/forecast?lat=${lat}&lon=${lon}&exclude={part}&units=metric&appid=${WEATHER_API_KEY}`
+        ),
+      ]);
+      const [currentWeatherData, forecastWeatherData] = await Promise.all([
+        currentResponse.json(),
+        forecastResponse.json(),
+      ]);
+      setCurrentWeather({ city: searchData.label, ...currentWeatherData });
+      setForecastWeather({ city: searchData.label, ...forecastWeatherData });
+    } catch (error) {
+      console.error("Error fetching weather data:", error);
+    }
+  };
 
   const handleOnSearchChange = (searchData) => {
     if (searchData) {
-      fetchWeatherForLocation(searchData);
+      fetchWeather(searchData);
     }
-    return;
-  };
-
-  const fetchWeatherForLocation = (searchData) => {
-    const [lat, lon] = searchData.value.split(" ");
-    const currentWeatherFetch = fetch(
-      `${WEATHER_API_URL}/weather?lat=${lat}&lon=${lon}&exclude={part}&units=metric&appid=${WEATHER_API_KEY}`
-    );
-    const forecastWeatherFetch = fetch(
-      `${WEATHER_API_URL}/forecast?lat=${lat}&lon=${lon}&exclude={part}&units=metric&appid=${WEATHER_API_KEY}`
-    );
-    Promise.all([currentWeatherFetch, forecastWeatherFetch])
-      .then(async (response) => {
-        const weatherResponse = await response[0].json();
-        const forecastResponse = await response[1].json();
-        setCurrentWeather({ city: searchData.label, ...weatherResponse });
-        setForecastWeather({ city: searchData.label, ...forecastResponse });
-      })
-      .catch((err) => console.log(err));
   };
 
   return (
