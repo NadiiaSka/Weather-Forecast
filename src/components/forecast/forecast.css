@@ -43,3 +43,29 @@
 .night {
   color: #797979;
 }
+
+.daily-details-grid {
+  display: grid;
+  grid-row-gap: 0;
+  grid-column-gap: 15px;
+  row-gap: 0;
+  column-gap: 20px;
+  grid-template-columns: auto auto;
+  flex: 1 1;
+  padding: 5px 15px;
+}
+
+.daily-details-grid-item {
+  height: 30px;
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.daily-details-grid-item label:first-child {
+  color: #757575;
+}
+
+.daily-details-grid-item label:second-child {
+  color: #212121;
+}
