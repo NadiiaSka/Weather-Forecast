@@ -36,6 +36,10 @@
 
 .description {
   flex: 1 1;
-  text-align: left;
-  margin-right: 15px;
+  text-align: right;
+  margin-right: 20px;
+}
+
+.night {
+  color: #797979;
 }
