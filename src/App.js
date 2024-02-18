@@ -36,8 +36,6 @@ function App() {
     }
   };
 
-  console.log(forecastWeather);
-
   const handleOnSearchChange = (searchData) => {
     if (searchData) {
       fetchWeather(searchData);
