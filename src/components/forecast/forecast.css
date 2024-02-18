@@ -60,12 +60,15 @@
   align-items: center;
   display: flex;
   justify-content: space-between;
+  font-size: 14px;
 }
 
 .daily-details-grid-item label:first-child {
   color: #757575;
+  text-align: left;
 }
 
-.daily-details-grid-item label:second-child {
+.daily-details-grid-item label:last-child {
   color: #212121;
+  text-align: right;
 }
