@@ -69,7 +69,7 @@ const Forecast = ({ data }) => {
   // }
 
   return (
-    <>
+    <div className="forecast">
       <label className="title">Daily forecast:</label>
       <Accordion allowZeroExpanded>
         {filteredListDay.map((item, index) => {
@@ -101,7 +101,7 @@ const Forecast = ({ data }) => {
           );
         })}
       </Accordion>
-    </>
+    </div>
   );
 };
 
