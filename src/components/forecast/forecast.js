@@ -40,7 +40,6 @@ const Forecast = ({ data }) => {
   const filteredListDay = list.filter((item) => {
     const dateTime = new Date(item.dt_txt);
     const time = dateTime.getHours();
-
     // Check if the date is after tomorrow and time is 12:00:00
     return isAfterTomorrow(item.dt_txt) && time === 12;
   });
@@ -54,25 +53,13 @@ const Forecast = ({ data }) => {
     return isAfterTomorrow(item.dt_txt) && time === 0;
   });
 
-  // Get geolocation from the browser
-  // if ("geolocation" in navigator) {
-  //   // Get the user's current position
-  //   navigator.geolocation.getCurrentPosition(function (position) {
-  //     const latitude = position.coords.latitude;
-  //     const longitude = position.coords.longitude;
-
-  //     console.log("Latitude:", latitude);
-  //     console.log("Longitude:", longitude);
-  //   });
-  // } else {
-  //   console.log("Geolocation is not supported by this browser.");
-  // }
-
   return (
     <div className="forecast">
       <label className="title">Daily forecast:</label>
       <Accordion allowZeroExpanded>
         {filteredListDay.map((item, index) => {
+          const iconName = item.weather[0].icon;
+          const dayIconName = iconName.slice(0, -1) + "d";
           return (
             <AccordionItem key={index}>
               <AccordionItemHeading>
@@ -81,7 +68,7 @@ const Forecast = ({ data }) => {
                     <img
                       alt="weather"
                       className="icon-small"
-                      src={`icons/${item.weather[0].icon}.png`}
+                      src={`icons/${dayIconName}.png`}
                     />
                     <label className="day">{forecastWeekDays[index]}</label>
                     <label className="description">
