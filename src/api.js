@@ -35,6 +35,44 @@ export const cityOptions = async (inputValue) => {
 export const WEATHER_API_URL = "https://api.openweathermap.org/data/2.5";
 export const WEATHER_API_KEY = "a9c5f47a2a143ab0745e760d11f4c41c";
 
+export const fetchCurrentWeather = async (searchData, setCurrentWeather) => {
+  try {
+    const [lat, lon] = searchData.value.split(" ");
+    const response = await axios.get(`${WEATHER_API_URL}/weather`, {
+      params: {
+        lat,
+        lon,
+        exclude: "{part}",
+        units: "metric",
+        appid: WEATHER_API_KEY,
+      },
+    });
+    const currentWeatherData = response.data;
+    setCurrentWeather({ city: searchData.label, ...currentWeatherData });
+  } catch (error) {
+    console.error("Error fetching current weather data:", error);
+  }
+};
+
+export const fetchForecast = async (searchData, setForecastWeather) => {
+  try {
+    const [lat, lon] = searchData.value.split(" ");
+    const response = await axios.get(`${WEATHER_API_URL}/forecast`, {
+      params: {
+        lat,
+        lon,
+        exclude: "{part}",
+        units: "metric",
+        appid: WEATHER_API_KEY,
+      },
+    });
+    const forecastWeatherData = response.data;
+    setForecastWeather({ city: searchData.label, ...forecastWeatherData });
+  } catch (error) {
+    console.error("Error fetching forecast data:", error);
+  }
+};
+
 export const fetchCurrentLocation = async () => {
   return new Promise((resolve, reject) => {
     if (navigator.geolocation) {
