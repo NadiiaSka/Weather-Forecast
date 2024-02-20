@@ -1,10 +1,8 @@
 import "./App.css";
 import { useEffect, useState } from "react";
 import Search from "./components/search/search";
-import GetCurrentLocation from "./components/search/GetCurrentLocation";
 import CurrentWeather from "./components/current-weather/current-weather";
 import Forecast from "./components/forecast/forecast";
-import { useQuery } from "react-query";
 import { fetchCurrentWeather, fetchForecast } from "./api";
 
 function App() {
@@ -12,6 +10,7 @@ function App() {
   const [currentWeather, setCurrentWeather] = useState(null);
   const [forecastWeather, setForecastWeather] = useState(null);
 
+  //refactore to use react query
   useEffect(() => {
     fetchCurrentWeather(defaultSearchData, setCurrentWeather);
     fetchForecast(defaultSearchData, setForecastWeather);
@@ -29,7 +28,6 @@ function App() {
       <Search onSearchChange={handleOnSearchChange} />
       {currentWeather && <CurrentWeather data={currentWeather} />}
       {forecastWeather && <Forecast data={forecastWeather} />}
-      {<GetCurrentLocation />}
     </div>
   );
 }
