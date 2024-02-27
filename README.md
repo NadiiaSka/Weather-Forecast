@@ -1,6 +1,6 @@
-# 3d Earth application:
+# Weather Forecast application:
 
-https://3d-earth-nadiia.netlify.app
+https://weather-nadiia.netlify.app/
 
 ## Available Scripts
 
