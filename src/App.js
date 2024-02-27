@@ -1,25 +1,53 @@
 import "./App.css";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Search from "./components/search/search";
 import CurrentWeather from "./components/current-weather/current-weather";
 import Forecast from "./components/forecast/forecast";
-import { fetchCurrentWeather, fetchForecast } from "./api";
+import {
+  fetchCurrentLocation,
+  fetchCurrentWeather,
+  fetchForecast,
+} from "./api";
+import { useQuery } from "react-query";
 
 function App() {
-  const defaultSearchData = { value: "50.4504 30.5245", label: "Kyiv" };
+  const [searchData, setSearchData] = useState(null);
   const [currentWeather, setCurrentWeather] = useState(null);
   const [forecastWeather, setForecastWeather] = useState(null);
 
-  //refactore to use react query
-  useEffect(() => {
-    fetchCurrentWeather(defaultSearchData, setCurrentWeather);
-    fetchForecast(defaultSearchData, setForecastWeather);
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  // Fetch location data on application start
+  const { isLoading, isError } = useQuery("location", fetchCurrentLocation, {
+    onSuccess: (data) => {
+      setSearchData({
+        value: `${data.latitude} ${data.longitude}`,
+      });
+    },
+  });
+
+  useQuery(
+    ["currentWeather", searchData],
+    () => fetchCurrentWeather(searchData),
+    {
+      enabled: !!searchData,
+      onSuccess: setCurrentWeather,
+    }
+  );
+
+  useQuery(["forecastWeather", searchData], () => fetchForecast(searchData), {
+    enabled: !!searchData,
+    onSuccess: setForecastWeather,
+  });
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+  if (isError) {
+    return <div>Error: {isError}</div>;
+  }
 
   const handleOnSearchChange = (searchData) => {
+    console.log("searchData", searchData);
     if (searchData) {
-      fetchCurrentWeather(searchData, setCurrentWeather);
-      fetchForecast(searchData, setForecastWeather);
+      setSearchData(searchData);
     }
   };
 

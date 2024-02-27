@@ -48,7 +48,7 @@ export const fetchCurrentWeather = async (searchData, setCurrentWeather) => {
       },
     });
     const currentWeatherData = response.data;
-    setCurrentWeather({ city: searchData.label, ...currentWeatherData });
+    return { city: searchData.label, ...currentWeatherData };
   } catch (error) {
     console.error("Error fetching current weather data:", error);
   }
@@ -67,7 +67,7 @@ export const fetchForecast = async (searchData, setForecastWeather) => {
       },
     });
     const forecastWeatherData = response.data;
-    setForecastWeather({ city: searchData.label, ...forecastWeatherData });
+    return { city: searchData.label, ...forecastWeatherData };
   } catch (error) {
     console.error("Error fetching forecast data:", error);
   }
