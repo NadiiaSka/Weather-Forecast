@@ -36,28 +36,55 @@ const Forecast = ({ data }) => {
     return date >= tomorrow;
   };
 
-  // Filter the list
-  const filteredListDay = list.filter((item) => {
-    const dateTime = new Date(item.dt_txt);
-    const time = dateTime.getHours();
-    // Check if the date is after tomorrow and time is 12:00:00
-    return isAfterTomorrow(item.dt_txt) && time === 12;
+  // Create an object to store the data for each day
+  const maxDayTemperatureData = {};
+
+  // Iterate through each item in the list
+  list.forEach((item) => {
+    // Check if the date is after tomorrow and item.sys.pod === "d"
+    if (isAfterTomorrow(item.dt_txt) && item.sys.pod === "d") {
+      const date = item.dt_txt.split(" ")[0]; // Extract the date without time
+
+      // If the date is not in maxTemperatureData or the temperature is greater than the current max temperature for that day
+      if (
+        !maxDayTemperatureData[date] ||
+        item.main.temp > maxDayTemperatureData[date].main.temp
+      ) {
+        maxDayTemperatureData[date] = item; // Update the data for that day with the current item
+      }
+    }
   });
 
-  // Filter the list
-  const filteredListNight = list.filter((item) => {
-    const dateTime = new Date(item.dt_txt);
-    const time = dateTime.getHours();
-
-    // Check if the date is after tomorrow and time is 00:00:00
-    return isAfterTomorrow(item.dt_txt) && time === 0;
+  // Create an object to store the data for each night
+  const minNightTemperatureData = {};
+  // Iterate through each item in the list
+  list.forEach((item) => {
+    // Check if the date is after tomorrow and it's a night item.sys.pod === "n"
+    if (isAfterTomorrow(item.dt_txt) && item.sys.pod === "n") {
+      const date = item.dt_txt.split(" ")[0]; // Extract the date without time
+      const temperature = item.main.temp; // Get the temperature
+      // return min temp for the date
+      if (
+        !minNightTemperatureData[date] ||
+        temperature < minNightTemperatureData[date]
+      ) {
+        minNightTemperatureData[date] = temperature; // Update the min temperature for that night
+      }
+    }
   });
+
+  //convert objects to the list
+  const minNightTemperatureDataList = Object.values(minNightTemperatureData);
+  const maxDayTemperatureList = Object.values(maxDayTemperatureData).slice(
+    0,
+    -1
+  );
 
   return (
     <div className="forecast">
       <label className="title">Daily forecast:</label>
       <Accordion allowZeroExpanded>
-        {filteredListDay.map((item, index) => {
+        {maxDayTemperatureList.map((item, index) => {
           const iconName = item.weather[0].icon;
           const dayIconName = iconName.slice(0, -1) + "d";
           return (
@@ -77,7 +104,7 @@ const Forecast = ({ data }) => {
                     <label className="day-night">
                       {Math.round(item.main.temp)}°{" / "}
                       <span className="night">
-                        {Math.round(filteredListNight[index].main.temp)}°
+                        {Math.round(minNightTemperatureDataList[index])}°
                       </span>
                     </label>
                   </div>
