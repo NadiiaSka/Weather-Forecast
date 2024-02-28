@@ -90,3 +90,18 @@ export const fetchCurrentLocation = async () => {
     }
   });
 };
+
+export const fetchCurrentCity = async (searchData) => {
+  const [lat, lon] = searchData.value.split(" ");
+  try {
+    const response = await axios.get(
+      `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`
+    );
+    const data = response.data;
+    // Extract the city name from the response
+    const city = data.address.city || data.address.town || data.address.village;
+    return city + ", " + data.address.country_code.toUpperCase();
+  } catch (error) {
+    throw new Error("Error fetching current city");
+  }
+};

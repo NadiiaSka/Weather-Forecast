@@ -4,6 +4,7 @@ import Search from "./components/search/search";
 import CurrentWeather from "./components/current-weather/current-weather";
 import Forecast from "./components/forecast/forecast";
 import {
+  fetchCurrentCity,
   fetchCurrentLocation,
   fetchCurrentWeather,
   fetchForecast,
@@ -21,6 +22,14 @@ function App() {
       setSearchData({
         value: `${data.latitude} ${data.longitude}`,
       });
+    },
+  });
+
+  //get a city name for the current location
+  useQuery("getCityName", () => fetchCurrentCity(searchData), {
+    enabled: !!searchData,
+    onSuccess: (data) => {
+      setSearchData({ ...searchData, label: data });
     },
   });
 
@@ -45,7 +54,6 @@ function App() {
   }
 
   const handleOnSearchChange = (searchData) => {
-    console.log("searchData", searchData);
     if (searchData) {
       setSearchData(searchData);
     }
