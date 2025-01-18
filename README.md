@@ -2,6 +2,8 @@
 
 https://weather-nadiia.netlify.app/
 
+<img src="https://github.com/NadiiaSka/Weather-Forecast/assets/82064570/a8e1e45d-084a-4676-a5be-5c03be7d3093" alt="Weather Forecast App" width="400"/>
+
 ## Available Scripts
 
 In the project directory, you can run:
